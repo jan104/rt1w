@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -69,3 +70,11 @@ func Cross(v vec3, vv vec3) vec3 {
 func UnitVector(v vec3) vec3 {
 	return v.Div(v.Len())
 }
+
+// Implement Stringer interface
+func (v vec3) String() string {
+	return fmt.Sprintf("%f %f %f", v.e0, v.e1, v.e2)
+}
+
+type point3 = vec3
+type color = vec3
