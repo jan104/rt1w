@@ -5,6 +5,12 @@ import (
 	"os"
 )
 
+func ray_color(r ray) color {
+	unit_direction := UnitVector(r.direction())
+	t := 0.5 * (unit_direction.Y() + 1.0)
+	return Add(color{1.0, 1.0, 1.0}.Multi(1.0-t), color{0.5, 0.7, 1.0}.Multi(t))
+}
+
 func main() {
 	routine()
 }
