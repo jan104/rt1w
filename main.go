@@ -6,6 +6,10 @@ import (
 )
 
 func main() {
+	routine()
+}
+
+func routine() {
 	const image_width = 256
 	const image_height = 256
 
@@ -13,19 +17,13 @@ func main() {
 	for j := image_height - 1; j >= 0; j-- {
 		fmt.Fprintf(os.Stderr, "\rScanlines remaining: %d ", j)
 		for i := 0; i < image_width; i++ {
-			r := float32(i) / (image_width - 1)
-			g := float32(j) / (image_height - 1)
-			b := 0.25
-
-			ir := int32(255.999 * r)
-			ig := int32(255.999 * g)
-			ib := int32(255.999 * b)
-
-			fmt.Printf("%d %d %d\n", ir, ig, ib)
+			pixel_color := color{float64(i) / (image_width - 1), float64(j) / (image_height - 1), 0.25}
+			write_color(pixel_color)
 		}
 	}
 	fmt.Fprint(os.Stderr, "\nDone\n")
 
-	v := new(vec3)
-	fmt.Fprintln(os.Stderr, v.X())
+	//v := new(vec3)
+	//fmt.Fprintln(os.Stderr, v.X())
+
 }
