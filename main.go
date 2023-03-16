@@ -6,13 +6,21 @@ import (
 )
 
 func ray_color(r ray) color {
+	if (hit_sphere(point3{0, 0, -1}, 0.5, r)) {
+		return color{1, 0, 0}
+	}
 	unit_direction := UnitVector(r.direction())
 	t := 0.5 * (unit_direction.Y() + 1.0)
 	return Add(color{1.0, 1.0, 1.0}.Multi(1.0-t), color{0.5, 0.7, 1.0}.Multi(t))
 }
 
-func main() {
-	routine()
+func hit_sphere(center point3, radius float64, r ray) bool {
+	oc := Sub(r.origin(), center)
+	a := Dot(r.direction(), r.direction())
+	b := 2.0 * Dot(oc, r.direction())
+	c := Dot(oc, oc) - radius*radius
+	discriminant := b*b - 4*a*c
+	return discriminant > 0
 }
 
 func routine() {
@@ -53,4 +61,8 @@ func routine() {
 	//v := new(vec3)
 	//fmt.Fprintln(os.Stderr, v.X())
 
+}
+
+func main() {
+	routine()
 }
