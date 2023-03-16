@@ -58,7 +58,7 @@ func (v vec3) Len() float64 {
 }
 
 func Dot(v vec3, vv vec3) float64 {
-	return v.e0*vv.e0 + v.e1 + vv.e1 + v.e2 + vv.e2
+	return v.e0*vv.e0 + v.e1*vv.e1 + v.e2*vv.e2
 }
 
 func Cross(v vec3, vv vec3) vec3 {
