@@ -16,14 +16,35 @@ func main() {
 }
 
 func routine() {
-	const image_width = 256
-	const image_height = 256
+	// Image
+	const aspect_ratio float64 = 16.0 / 9.0
+	const image_width int = 400
+	const image_height int = int(float64(image_width) / aspect_ratio)
+
+	// Camera
+	viewport_height := 2.0
+	viewport_width := aspect_ratio * viewport_height
+	focal_length := 1.0
+
+	origin := point3{0, 0, 0}
+	horizontal := vec3{viewport_width, 0, 0}
+	vertical := vec3{0, viewport_height, 0}
+	// lower_left_corner = origin - horizontal/2 - vertical/2 - vec3(0, 0, focal_length);
+	lower_left_corner := Sub(origin, horizontal.Div(2))
+	lower_left_corner = Sub(lower_left_corner, vertical.Div(2))
+	lower_left_corner = Sub(lower_left_corner, vec3{0, 0, focal_length})
 
 	fmt.Printf("P3\n%d %d\n255\n", image_width, image_height)
 	for j := image_height - 1; j >= 0; j-- {
 		fmt.Fprintf(os.Stderr, "\rScanlines remaining: %d ", j)
 		for i := 0; i < image_width; i++ {
-			pixel_color := color{float64(i) / (image_width - 1), float64(j) / (image_height - 1), 0.25}
+			u := float64(i) / (float64(image_width - 1))
+			v := float64(j) / (float64(image_height - 1))
+			ray_dir := Add(lower_left_corner, horizontal.Multi(u))
+			ray_dir = Add(ray_dir, vertical.Multi(v))
+			ray_dir = Sub(ray_dir, origin)
+			r := ray{origin, ray_dir}
+			pixel_color := ray_color(r)
 			write_color(pixel_color)
 		}
 	}
