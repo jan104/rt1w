@@ -2,25 +2,32 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 )
 
 func ray_color(r ray) color {
-	if (hit_sphere(point3{0, 0, -1}, 0.5, r)) {
-		return color{1, 0, 0}
+	t := hit_sphere(point3{0, 0, -1}, 0.5, r)
+	if t > 0.0 {
+		N := UnitVector(Sub(r.at(t), vec3{0, 0, -1}))
+		return color{N.X() + 1, N.Y() + 1, N.Z() + 1}.Multi(0.5)
 	}
 	unit_direction := UnitVector(r.direction())
-	t := 0.5 * (unit_direction.Y() + 1.0)
+	t = 0.5 * (unit_direction.Y() + 1.0)
 	return Add(color{1.0, 1.0, 1.0}.Multi(1.0-t), color{0.5, 0.7, 1.0}.Multi(t))
 }
 
-func hit_sphere(center point3, radius float64, r ray) bool {
+func hit_sphere(center point3, radius float64, r ray) float64 {
 	oc := Sub(r.origin(), center)
 	a := Dot(r.direction(), r.direction())
 	b := 2.0 * Dot(oc, r.direction())
 	c := Dot(oc, oc) - radius*radius
 	discriminant := b*b - 4*a*c
-	return discriminant > 0
+	if discriminant < 0 {
+		return -1.0
+	} else {
+		return (-b - math.Sqrt(discriminant)) / (2.0 * a)
+	}
 }
 
 func routine() {
