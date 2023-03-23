@@ -19,14 +19,14 @@ func ray_color(r ray) color {
 
 func hit_sphere(center point3, radius float64, r ray) float64 {
 	oc := Sub(r.origin(), center)
-	a := Dot(r.direction(), r.direction())
-	b := 2.0 * Dot(oc, r.direction())
-	c := Dot(oc, oc) - radius*radius
-	discriminant := b*b - 4*a*c
+	a := r.direction().LenSquared()
+	half_b := Dot(oc, r.direction())
+	c := oc.LenSquared() - radius*radius
+	discriminant := half_b*half_b - a*c
 	if discriminant < 0 {
 		return -1.0
 	} else {
-		return (-b - math.Sqrt(discriminant)) / (2.0 * a)
+		return (-half_b - math.Sqrt(discriminant)) / a
 	}
 }
 
