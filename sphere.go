@@ -28,6 +28,7 @@ func (s sphere) hit(r ray, t_min, t_max float64, rec hit_record) bool {
 	}
 	rec.t = root
 	rec.p = r.at(rec.t)
-	rec.normal = Sub(rec.p, s.center).Div(s.radius)
+	outward_normal := Sub(rec.p, s.center).Div(s.radius)
+	rec.set_face_normal(r, outward_normal)
 	return true
 }
